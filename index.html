@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ADHD Cleaning Planner</title>
+  <title>ADHD Cleaning Planner 🌈</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,59 +17,59 @@
       text-align: center;
       padding: 1rem;
     }
-    .room {
-      margin: 1rem;
+    nav {
+      display: flex;
+      justify-content: space-around;
+      background: #333;
+      color: white;
+    }
+    nav button {
+      flex: 1;
       padding: 1rem;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      background: #333;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
     }
-    .room h2 {
-      margin-top: 0;
+    nav button.active {
+      background: #4CAF50;
     }
+    .tab {
+      display: none;
+      padding: 1rem;
+    }
+    .tab.active {
+      display: block;
+    }
+
+    /* Rainbow pill styling */
     .task {
       display: inline-block;
-      background: #e0f7fa;
       padding: 0.5rem 1rem;
       margin: 0.3rem;
       border-radius: 20px;
       cursor: pointer;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400% 400%;
+      animation: rainbowShift 6s ease infinite;
       transition: transform 0.1s;
     }
     .task:hover {
       transform: scale(1.05);
+      opacity: 0.9;
     }
     .task.done {
-      background: #c8e6c9;
+      background: linear-gradient(135deg, #66bb6a, #43a047);
       text-decoration: line-through;
+      animation: none;
     }
-    /* Popup styles */
-    .popup {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-    .popup-content {
-      background: #4CAF50;
-      color: white;
-      padding: 2rem;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 80%;
-    }
-    .popup button {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 6px;
-      background: white;
-      color: #4CAF50;
-      font-weight: bold;
-      cursor: pointer;
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
   </style>
 </head>
@@ -77,79 +77,94 @@
 
 <header>
   <h1>ADHD Cleaning Planner</h1>
-  <p>Customisable tasks with reminders & motivation</p>
+  <p>🌈 Customisable tasks with rainbow energy</p>
 </header>
 
-<div id="app"></div>
+<nav>
+  <button id="homeBtn" class="active" onclick="showTab('home')">Home</button>
+  <button id="customBtn" onclick="showTab('customise')">Customise</button>
+</nav>
 
-<!-- Popup for encouragement -->
-<div class="popup" id="popup">
-  <div class="popup-content">
-    <h2>🌟 Keep Going!</h2>
-    <p id="popup-message"></p>
-    <button onclick="closePopup()">Thanks 💪</button>
-  </div>
+<div id="home" class="tab active">
+  <h2>Welcome!</h2>
+  <p>This is your ADHD Cleaning Planner. Switch to the <b>Customise</b> tab to choose your tasks 🌈.</p>
+</div>
+
+<div id="customise" class="tab">
+  <h2>Customise Your Tasks</h2>
+  <div id="taskList"></div>
 </div>
 
 <script>
-  const rooms = {
-    "Lounge": ["Tidy toys & clutter", "Vacuum floor", "Dust shelves", "Clean windows"],
-    "Kitchen": ["Load/unload dishwasher", "Wipe counters", "Deep clean fridge", "Clean oven"],
-    "Bathroom": ["Clean toilet", "Wash towels", "Descale shower head"],
-    "Bedroom 1": ["Make bed", "Change sheets", "Vacuum", "Declutter wardrobe"],
-    "Bedroom 2": ["Make bed", "Change sheets", "Vacuum"],
-    "General": ["Empty bins", "Check medicine expiry", "Replace smoke alarm batteries"]
-  };
+  // Tabs switching
+  function showTab(tabName) {
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+    if (tabName === "home") document.getElementById("homeBtn").classList.add('active');
+    if (tabName === "customise") document.getElementById("customBtn").classList.add('active');
+  }
 
-  const encouragementMessages = [
-    "You’re doing amazing — one step at a time! ✨",
-    "Small wins add up to big results. 🚀",
-    "A tidy space makes a calm mind. 💆‍♀️",
-    "You’ve already achieved so much today! 🌸"
+  // Full task list
+  const tasks = [
+    "Make beds",
+    "Load/unload dishwasher",
+    "Wipe kitchen counters & dining table",
+    "Sweep/vacuum/mop floors",
+    "Tidy toys & living areas",
+    "Take out rubbish/compost/recycling",
+    "Wipe bathroom sinks, mirrors, counters",
+    "Laundry: wash, dry, fold, put away",
+    "Change bed sheets",
+    "Wash towels & bath mats",
+    "Clean toilets",
+    "Dust furniture, shelves, TV, blinds",
+    "Empty bins in every room",
+    "Clean microwave & small appliances",
+    "Water indoor plants",
+    "Meal plan & grocery shop",
+    "Deep clean fridge & throw expired food",
+    "Wipe cabinet fronts & handles",
+    "Wash duvet covers, blankets, pillows",
+    "Clean oven & extractor hood filters",
+    "Vacuum upholstery (sofas, cushions)",
+    "Clean washing machine drum/filter",
+    "Clean dishwasher filter",
+    "Wipe skirting boards, doors, switches, remote controls",
+    "Declutter kids’ clothes, toys, or drawers",
+    "Flip/rotate mattresses",
+    "Wash curtains or window coverings",
+    "Clean behind/under fridge, washing machine, cooker",
+    "Descale kettle, coffee machine, shower heads",
+    "Restock cleaning/household supplies",
+    "Wash windows (inside/outside)",
+    "Garden/yard: mow lawn, trim hedges, sweep patio",
+    "Clean car: vacuum, wipe surfaces, check fluids",
+    "Declutter wardrobe (season change clothes)",
+    "Organise seasonal decorations (Christmas, Halloween, etc.)",
+    "Clean gutters",
+    "Service boiler/heating/air conditioning",
+    "Spring clean full house reset",
+    "Steam clean carpets or rugs",
+    "Clean garage/loft/attic/storage",
+    "Replace smoke alarm/carbon monoxide detector batteries",
+    "Replace car key, remote, clock, toy batteries",
+    "Check expiry dates in medicine cabinet & first aid kit",
+    "Service the car (MOT, oil, tyres, brakes, etc.)",
+    "Service major appliances (boiler, HVAC, water filter)",
+    "Update paperwork (insurance, school forms, tax, etc.)",
+    "Declutter digital: photos, subscriptions, files"
   ];
 
-  const skippedTasks = {};
+  const taskListDiv = document.getElementById('taskList');
 
-  function renderApp() {
-    const app = document.getElementById('app');
-    app.innerHTML = '';
-    for (let room in rooms) {
-      const div = document.createElement('div');
-      div.className = 'room';
-      div.innerHTML = `<h2>${room}</h2>`;
-      rooms[room].forEach(task => {
-        const span = document.createElement('span');
-        span.className = 'task';
-        span.innerText = task;
-        span.onclick = () => toggleTask(span, task);
-        div.appendChild(span);
-      });
-      app.appendChild(div);
-    }
-  }
-
-  function toggleTask(element, task) {
-    if (element.classList.contains('done')) {
-      element.classList.remove('done');
-    } else {
-      element.classList.add('done');
-      // show encouragement randomly
-      if (Math.random() > 0.5) {
-        showPopup(encouragementMessages[Math.floor(Math.random()*encouragementMessages.length)]);
-      }
-    }
-  }
-
-  function showPopup(message) {
-    document.getElementById('popup-message').innerText = message;
-    document.getElementById('popup').style.display = 'flex';
-  }
-
-  function closePopup() {
-    document.getElementById('popup').style.display = 'none';
-  }
-
-  renderApp();
+  tasks.forEach(task => {
+    const span = document.createElement('span');
+    span.className = 'task';
+    span.innerText = task;
+    span.onclick = () => span.classList.toggle('done');
+    taskListDiv.appendChild(span);
+  });
 </script>
 
 </body>
