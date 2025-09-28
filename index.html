@@ -5,23 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ADHD Cleaning Planner 🌈</title>
   <style>
-    body, html {
-      margin: 0; padding: 0; height: 100%;
-      font-family: Arial, sans-serif;
-    }
+    body, html { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; }
     header {
       background: linear-gradient(90deg, #ffe0e9, #fff3cd, #e0f7fa, #e8f5e9);
       color: #333; text-align: center; padding: 1rem;
       font-size: 1.5rem; font-weight: bold;
     }
-    .grid {
-      display: grid; grid-template-rows: 1fr 1fr 1fr 1fr;
-      height: calc(100% - 60px);
-    }
-    .tile {
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; font-weight: bold; cursor: pointer; color: #333;
-    }
+    .grid { display: grid; grid-template-rows: 1fr 1fr 1fr 1fr; height: calc(100% - 60px); }
+    .tile { display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; font-weight: bold; cursor: pointer; color: #333; }
     .calendar { background: #ffe0e9; }
     .planner { background: #fff3cd; }
     .customise { background: #e0f7fa; }
@@ -30,28 +22,20 @@
     .tab.active { display: block; }
     button.back {
       margin-top: 1rem; padding: 0.7rem 1.5rem;
-      font-size: 1rem; border: none; border-radius: 8px;
-      background: #4CAF50; color: white; cursor: pointer;
+      border: none; border-radius: 8px; background: #4CAF50; color: white; cursor: pointer;
     }
-    /* Planner styles */
-    .day-plan {
-      margin: 1rem 0; padding: 1rem;
-      border-radius: 10px;
-      background: #f9f9f9;
-      border: 2px solid #ddd;
-      text-align: left;
-    }
-    .day-plan h3 { margin-top: 0; }
-    .task-item {
-      padding: 0.5rem; margin: 0.3rem 0;
-      border-radius: 6px;
-      background: #e0f7fa;
-      cursor: pointer;
-    }
-    .task-item.done {
-      background: #c8e6c9;
-      text-decoration: line-through;
-    }
+    .today-tasks { background: #f9f9f9; border: 2px solid #ccc;
+      border-radius: 10px; padding: 1rem; margin-bottom: 1rem; text-align: left; }
+    .task-item { padding: 0.5rem; margin: 0.3rem 0;
+      border-radius: 6px; background: #e0f7fa; cursor: pointer; }
+    .task-item.done { background: #c8e6c9; text-decoration: line-through; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+    .day-name { font-weight: bold; background: #ddd; padding: 5px;
+      border-radius: 4px; text-align: center; }
+    .day { padding: 10px; border-radius: 6px; background: #f0f0f0;
+      text-align: center; cursor: pointer; }
+    .day.today { background: #4CAF50; color: white; font-weight: bold; }
+    .day.empty { background: transparent; cursor: default; }
   </style>
 </head>
 <body>
@@ -68,15 +52,20 @@
   </div>
 </div>
 
-<!-- Preplanned Planner -->
-<div id="planner" class="tab">
-  <h2>📝 Preplanned Cleaning Schedule</h2>
-  <div id="plannerContent"></div>
+<!-- Calendar Hub -->
+<div id="calendar" class="tab">
+  <h2>📅 Calendar Hub</h2>
+  <div class="today-tasks" id="todayTasks">
+    <h3>Tasks for Selected Day</h3>
+    <div id="taskList"></div>
+  </div>
+  <h3 id="monthLabel"></h3>
+  <div class="calendar-grid" id="calendarGrid"></div>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
 <!-- Other Tabs -->
-<div id="calendar" class="tab"><h2>📅 Calendar Hub</h2><button class="back" onclick="showTab('home')">⬅ Back</button></div>
+<div id="planner" class="tab"><h2>📝 Preplanned Planner</h2><p>Coming soon...</p><button class="back" onclick="showTab('home')">⬅ Back</button></div>
 <div id="customise" class="tab"><h2>🎨 Customise Tasks</h2><button class="back" onclick="showTab('home')">⬅ Back</button></div>
 <div id="settings" class="tab"><h2>⚙️ Settings</h2><button class="back" onclick="showTab('home')">⬅ Back</button></div>
 
@@ -86,52 +75,106 @@
     document.getElementById(tabName).classList.add('active');
   }
 
-  // Preplanned Weekly Cleaning Schedule
-  const weeklyPlan = {
-    "Monday": [
-      "Make beds", "Load/unload dishwasher", "Wipe kitchen counters",
-      "Laundry: wash & fold", "Vacuum high-traffic floors"
+  // Task structure
+  const tasks = {
+    daily: [
+      "Make beds","Load/unload dishwasher","Wipe kitchen counters & table",
+      "Sweep/vacuum high-traffic floors","Tidy toys & living areas",
+      "Take out rubbish","Wipe bathroom sinks & mirrors","Laundry if needed"
     ],
-    "Tuesday": [
-      "Make beds", "Tidy toys & living areas", "Dust furniture",
-      "Clean microwave & appliances", "Empty bins"
-    ],
-    "Wednesday": [
-      "Make beds", "Wipe bathroom sinks & mirrors", "Change bed sheets",
-      "Laundry: towels", "Vacuum downstairs"
-    ],
-    "Thursday": [
-      "Make beds", "Wipe kitchen counters & dining table", "Clean toilets",
-      "Mop floors", "Declutter one drawer"
-    ],
-    "Friday": [
-      "Make beds", "Meal plan & grocery shop", "Vacuum upstairs",
-      "Dust shelves", "Laundry: kids’ clothes"
-    ],
-    "Saturday": [
-      "Make beds", "Garden/yard tidy", "Wash car",
-      "Organise seasonal items", "Family tidy-up hour"
-    ],
-    "Sunday": [
-      "Make beds", "Full house reset (quick tidy everywhere)",
-      "Check smoke alarm batteries", "Restock cleaning supplies"
+    weekly: {
+      1: ["Change bed sheets"],        // Monday
+      2: ["Dust furniture & shelves"], // Tuesday
+      3: ["Clean toilets"],            // Wednesday
+      4: ["Mop floors"],               // Thursday
+      5: ["Meal plan & grocery shop"], // Friday
+      6: ["Garden/yard or wash car"],  // Saturday
+      0: ["Restock supplies & reset"]  // Sunday
+    },
+    monthly: {
+      1: ["Deep clean fridge"],
+      7: ["Wash towels & bath mats"],
+      14: ["Vacuum upholstery"],
+      21: ["Clean oven & extractor filters"],
+      28: ["Flip/rotate mattresses"]
+    },
+    deep: [
+      "Wash windows inside & out",
+      "Wash curtains or blinds",
+      "Steam clean carpets or rugs",
+      "Clean behind/under appliances",
+      "Descale kettle, coffee machine, shower heads",
+      "Organise seasonal decorations",
+      "Clean gutters",
+      "Clean garage/loft/attic/storage",
+      "Spring clean entire house reset",
+      "Replace batteries (smoke alarms, remotes, car keys)",
+      "Check expiry dates in medicine cabinet"
     ]
   };
 
-  const plannerContent = document.getElementById('plannerContent');
-  for (let day in weeklyPlan) {
-    const dayDiv = document.createElement('div');
-    dayDiv.className = 'day-plan';
-    dayDiv.innerHTML = `<h3>${day}</h3>`;
-    weeklyPlan[day].forEach(task => {
-      const div = document.createElement('div');
-      div.className = 'task-item';
-      div.innerText = task;
-      div.onclick = () => div.classList.toggle('done');
-      dayDiv.appendChild(div);
-    });
-    plannerContent.appendChild(dayDiv);
+  function loadTasksForDay(date) {
+    const list = document.getElementById("taskList");
+    list.innerHTML = "";
+
+    // Always add daily tasks
+    tasks.daily.forEach(t => addTaskItem(list, t));
+
+    // Weekly (by weekday)
+    const weekday = date.getDay(); 
+    if (tasks.weekly[weekday]) tasks.weekly[weekday].forEach(t => addTaskItem(list, t));
+
+    // Monthly (by date)
+    const dayOfMonth = date.getDate();
+    if (tasks.monthly[dayOfMonth]) tasks.monthly[dayOfMonth].forEach(t => addTaskItem(list, t));
+
+    // Example: deep cleaning once a month on the 15th
+    if (dayOfMonth === 15) tasks.deep.forEach(t => addTaskItem(list, t));
   }
+
+  function addTaskItem(list, text) {
+    const div = document.createElement("div");
+    div.className = "task-item";
+    div.innerText = text;
+    div.onclick = () => div.classList.toggle("done");
+    list.appendChild(div);
+  }
+
+  // Calendar render
+  const calendarGrid = document.getElementById("calendarGrid");
+  const monthLabel = document.getElementById("monthLabel");
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  monthLabel.innerText = `${monthNames[month]} ${year}`;
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+
+  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(name => {
+    const div = document.createElement("div");
+    div.className = "day-name";
+    div.innerText = name;
+    calendarGrid.appendChild(div);
+  });
+
+  for (let i=0;i<firstDay;i++) {
+    const empty = document.createElement("div");
+    empty.className = "day empty";
+    calendarGrid.appendChild(empty);
+  }
+
+  for (let d=1; d<=daysInMonth; d++) {
+    const dayDiv = document.createElement("div");
+    dayDiv.className = "day";
+    if (d === today.getDate()) dayDiv.classList.add("today");
+    dayDiv.innerText = d;
+    dayDiv.onclick = () => loadTasksForDay(new Date(year, month, d));
+    calendarGrid.appendChild(dayDiv);
+  }
+
+  // Load today on start
+  loadTasksForDay(today);
 </script>
 
 </body>
