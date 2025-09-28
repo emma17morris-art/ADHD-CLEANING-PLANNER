@@ -9,14 +9,16 @@
     header { background:linear-gradient(90deg,#ffe0e9,#fff3cd,#e0f7fa,#e8f5e9);
       padding:1rem; font-size:1.5rem; font-weight:bold; text-align:center; }
 
-    .grid-3 { display:grid; grid-template-rows:repeat(3,1fr); height:calc(100% - 60px); }
+    .grid-4 { display:grid; grid-template-rows:repeat(4,1fr); height:calc(100% - 60px); }
     .grid-10 { display:grid; grid-template-rows:repeat(10,1fr); height:calc(100% - 60px); }
 
     .tile { display:flex; justify-content:center; align-items:center;
       font-size:1.4rem; font-weight:bold; cursor:pointer; }
     .tile:hover { opacity:0.9; }
 
-    .calendar{background:#ffe0e9;} .create{background:#fff3cd;} .settings{background:#e0f7fa;}
+    .calendar{background:#ffe0e9;} .create{background:#fff3cd;}
+    .tips{background:#e1bee7;} .settings{background:#e0f7fa;}
+
     .daily{background:#ffe0e9;} .twice{background:#ffd9b3;} .weekly{background:#fff3cd;}
     .monthly{background:#e0f7fa;} .quarterly{background:#e8f5e9;} .deep{background:#f3e5f5;}
     .seasonal{background:#ffecb3;} .outside{background:#c8e6c9;} .festive{background:#ffe4e1;}
@@ -28,20 +30,9 @@
     button.back { margin-top:1rem; padding:0.7rem 1.2rem; background:#4CAF50; color:white;
       border:none; border-radius:8px; cursor:pointer; }
 
-    /* Task toggle list */
-    .task { display:flex; align-items:center; justify-content:space-between;
-      padding:0.5rem; margin:0.3rem 0; border:1px solid #ccc; border-radius:6px; background:#f9f9f9; }
-    .task input { transform:scale(1.4); }
-
-    /* Calendar toggle */
-    .switch { position:relative; display:inline-block; width:50px; height:24px; }
-    .switch input { opacity:0; width:0; height:0; }
-    .slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0;
-      background-color:#ccc; transition:.4s; border-radius:24px; }
-    .slider:before { position:absolute; content:""; height:18px; width:18px; left:3px; bottom:3px;
-      background:white; transition:.4s; border-radius:50%; }
-    input:checked + .slider { background-color:#4CAF50; }
-    input:checked + .slider:before { transform:translateX(26px); }
+    /* Tips styling */
+    .tip { background:#f9f9f9; border-left:6px solid #8e24aa;
+      padding:1rem; margin:1rem 0; border-radius:8px; font-size:1.1rem; }
   </style>
 </head>
 <body>
@@ -50,9 +41,10 @@
 
 <!-- Home -->
 <div id="home" class="tab active">
-  <div class="grid-3">
+  <div class="grid-4">
     <div class="tile calendar" onclick="showTab('calendar')">📅 Calendar</div>
     <div class="tile create" onclick="showTab('create')">🧽 Create Cleaning</div>
+    <div class="tile tips" onclick="showTab('tips')">💡 ADHD Tips</div>
     <div class="tile settings" onclick="showTab('settings')">⚙️ Settings</div>
   </div>
 </div>
@@ -80,21 +72,30 @@
     <div class="tile quarterly" onclick="showTab('quarterly')">📊 Quarterly</div>
     <div class="tile deep" onclick="showTab('deep')">🧹 Deep</div>
     <div class="tile seasonal" onclick="showTab('seasonal')">🍂 Seasonal</div>
-    <div class="tile outside" onclick="showTab('outside')">🌳 Outside Areas</div>
+    <div class="tile outside" onclick="showTab('outside')">🌳 Outside</div>
     <div class="tile festive" onclick="showTab('festive')">🎉 Festive</div>
     <div class="tile yearly" onclick="showTab('yearly')">🗓 Yearly</div>
   </div>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
-<!-- Example Daily -->
-<div id="daily" class="tab">
-  <h2>🌞 Daily Tasks</h2>
-  <div id="dailyTasks"></div>
-  <button class="back" onclick="showTab('create')">⬅ Back</button>
+<!-- ADHD Tips -->
+<div id="tips" class="tab">
+  <h2>💡 ADHD Cleaning Tips</h2>
+  <div class="tip">1️⃣ Make sure you get dressed and put shoes on — this tricks your brain into "do mode".</div>
+  <div class="tip">2️⃣ First thing in the morning, pop a wash on — you’ll already be winning before coffee ☕.</div>
+  <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
-<!-- Placeholders for all -->
+<!-- Settings -->
+<div id="settings" class="tab">
+  <h2>⚙️ Settings</h2>
+  <p>Preferences go here.</p>
+  <button class="back" onclick="showTab('home')">⬅ Back</button>
+</div>
+
+<!-- Example Daily -->
+<div id="daily" class="tab"><h2>🌞 Daily</h2><div id="dailyTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 <div id="twice" class="tab"><h2>🔁 Twice a Week</h2><div id="twiceTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 <div id="weekly" class="tab"><h2>📆 Weekly</h2><div id="weeklyTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 <div id="monthly" class="tab"><h2>🗓 Monthly</h2><div id="monthlyTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
@@ -106,70 +107,66 @@
 <div id="yearly" class="tab"><h2>🗓 Yearly</h2><div id="yearlyTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 
 <script>
-  // Example structured schedule
+  // Task schedule & logic (same as before)
   const taskSchedule = {
-    daily: ["Make beds","Wipe counters","Take out rubbish"],
-    twice: { Mon:["Vacuum"], Thu:["Mop kitchen"] },
-    weekly: { Mon:["Change bed sheets"], Wed:["Clean toilets"], Fri:["Dust furniture"] },
-    monthly: { 1:["Deep clean fridge"], 14:["Vacuum upholstery"], 28:["Rotate mattress"] },
-    quarterly: { 3:["Wash curtains"], 6:["Clean air vents"], 9:["Declutter garage"], 12:["Check boiler"] },
-    seasonal: { spring:["Garden prep"], autumn:["Clean gutters"], winter:["Check heating"] },
-    festive: { 12:["Put up decorations","Deep clean dining room"] },
-    yearly: { Jan:["Declutter closets"], Jun:["Service car"], Dec:["Update paperwork"] }
+    daily:["Make beds","Wipe counters","Take out rubbish"],
+    twice:{Mon:["Vacuum"],Thu:["Mop kitchen"]},
+    weekly:{Mon:["Change bed sheets"],Wed:["Clean toilets"],Fri:["Dust furniture"]},
+    monthly:{1:["Deep clean fridge"],14:["Vacuum upholstery"],28:["Rotate mattress"]},
+    quarterly:{3:["Wash curtains"],6:["Clean air vents"],9:["Declutter garage"],12:["Check boiler"]},
+    seasonal:{spring:["Garden prep"],autumn:["Clean gutters"],winter:["Check heating"]},
+    festive:{12:["Put up decorations","Deep clean dining room"]},
+    yearly:{Jan:["Declutter closets"],Jun:["Service car"],Dec:["Update paperwork"]}
   };
 
   let selectedTasks = {};
 
-  function renderCategory(cat) {
-    const container = document.getElementById(cat+"Tasks");
-    container.innerHTML = "";
-    let tasks = [];
-    if (Array.isArray(taskSchedule[cat])) tasks = taskSchedule[cat];
-    else if (typeof taskSchedule[cat] === "object") {
-      Object.values(taskSchedule[cat]).forEach(arr => tasks.push(...arr));
-    }
-    tasks.forEach(task => {
-      const div = document.createElement("div");
-      div.className = "task";
-      div.innerHTML = `<span>${task}</span>
-        <input type="checkbox" onchange="toggleTask('${cat}','${task}',this)">`;
+  function renderCategory(cat){
+    const container=document.getElementById(cat+"Tasks");
+    container.innerHTML="";
+    let tasks=[];
+    if(Array.isArray(taskSchedule[cat])) tasks=taskSchedule[cat];
+    else if(typeof taskSchedule[cat]==="object") Object.values(taskSchedule[cat]).forEach(arr=>tasks.push(...arr));
+    tasks.forEach(task=>{
+      const div=document.createElement("div");
+      div.className="task";
+      div.innerHTML=`<span>${task}</span><input type="checkbox" onchange="toggleTask('${cat}','${task}',this)">`;
       container.appendChild(div);
     });
   }
 
-  function toggleTask(cat, task, checkbox) {
-    if (!selectedTasks[cat]) selectedTasks[cat] = [];
-    if (checkbox.checked) selectedTasks[cat].push(task);
-    else selectedTasks[cat] = selectedTasks[cat].filter(t => t!==task);
+  function toggleTask(cat,task,checkbox){
+    if(!selectedTasks[cat]) selectedTasks[cat]=[];
+    if(checkbox.checked) selectedTasks[cat].push(task);
+    else selectedTasks[cat]=selectedTasks[cat].filter(t=>t!==task);
   }
 
-  function showCalendarTasks() {
-    const div = document.getElementById("calendarTasks");
-    div.innerHTML = "<h3>Today's Tasks</h3>";
-    const auto = document.getElementById("autoAssignToggle").checked;
+  function showCalendarTasks(){
+    const div=document.getElementById("calendarTasks");
+    div.innerHTML="<h3>Today's Tasks</h3>";
+    const auto=document.getElementById("autoAssignToggle").checked;
 
-    const today = new Date();
-    const weekday = today.toLocaleString("en",{weekday:"short"});
-    const day = today.getDate();
-    const month = today.toLocaleString("en",{month:"short"});
+    const today=new Date();
+    const weekday=today.toLocaleString("en",{weekday:"short"});
+    const day=today.getDate();
+    const month=today.toLocaleString("en",{month:"short"});
+    const monthNum=today.getMonth()+1;
 
-    let tasks = [];
+    let tasks=[];
 
-    if (auto) {
+    if(auto){
       tasks.push(...taskSchedule.daily);
-
-      if (taskSchedule.twice[weekday]) tasks.push(...taskSchedule.twice[weekday]);
-      if (taskSchedule.weekly[weekday]) tasks.push(...taskSchedule.weekly[weekday]);
-      if (taskSchedule.monthly[day]) tasks.push(...taskSchedule.monthly[day]);
-
-      if (taskSchedule.quarterly[today.getMonth()+1]) tasks.push(...taskSchedule.quarterly[today.getMonth()+1]);
-      if (taskSchedule.seasonal.spring && [2,3,4].includes(today.getMonth())) tasks.push(...taskSchedule.seasonal.spring);
-      if (taskSchedule.seasonal.autumn && [8,9,10].includes(today.getMonth())) tasks.push(...taskSchedule.seasonal.autumn);
-      if (taskSchedule.seasonal.winter && [11,0,1].includes(today.getMonth())) tasks.push(...taskSchedule.seasonal.winter);
-      if (taskSchedule.festive[today.getMonth()+1]) tasks.push(...taskSchedule.festive[today.getMonth()+1]);
-      if (taskSchedule.yearly[month]) tasks.push(...taskSchedule.yearly[month]);
+      if(taskSchedule.twice[weekday]) tasks.push(...taskSchedule.twice[weekday]);
+      if(taskSchedule.weekly[weekday]) tasks.push(...taskSchedule.weekly[weekday]);
+      if(taskSchedule.monthly[day]) tasks.push(...taskSchedule.monthly[day]);
+      if(taskSchedule.quarterly[monthNum]) tasks.push(...taskSchedule.quarterly[monthNum]);
+      if([2,3,4].includes(today.getMonth())) tasks.push(...(taskSchedule.seasonal.spring||[]));
+      if([8,9,10].includes(today.getMonth())) tasks.push(...(taskSchedule.seasonal.autumn||[]));
+      if([11,0,1].includes(today.getMonth())) tasks.push(...(taskSchedule.seasonal.winter||[]));
+      if(taskSchedule.festive[monthNum]) tasks.push(...taskSchedule.festive[monthNum]);
+      if(taskSchedule.yearly[month]) tasks.push(...taskSchedule.yearly[month]);
     } else {
-      for (let cat in selectedTasks) tasks.push(...selectedTasks[cat]);
+      for(let cat in selectedTasks) tasks.push(...selectedTasks[cat]);
     }
 
     tasks.forEach(task=>{
@@ -178,11 +175,11 @@
     });
   }
 
-  function showTab(tabName) {
+  function showTab(tabName){
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
     document.getElementById(tabName).classList.add("active");
-    if (tabName==="calendar") showCalendarTasks();
-    if (taskSchedule[tabName]) renderCategory(tabName);
+    if(tabName==="calendar") showCalendarTasks();
+    if(taskSchedule[tabName]) renderCategory(tabName);
   }
 </script>
 
