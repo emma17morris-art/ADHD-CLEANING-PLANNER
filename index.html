@@ -21,7 +21,7 @@
       font-weight: bold;
     }
 
-    /* Home: 4 full-width tiles */
+    /* Home: 4 full-width tiles stacked */
     .grid {
       display: grid;
       grid-template-rows: 1fr 1fr 1fr 1fr;
@@ -74,7 +74,7 @@
       cursor: pointer;
     }
 
-    /* Tasks box */
+    /* Today's task box */
     .today-tasks {
       background: #f9f9f9;
       border: 2px solid #ccc;
@@ -82,8 +82,6 @@
       padding: 1rem;
       margin-bottom: 1rem;
       text-align: left;
-      max-height: 45%;
-      overflow-y: auto;
     }
     .today-tasks h3 {
       margin-top: 0;
@@ -101,11 +99,19 @@
     }
 
     /* Calendar grid */
+    .calendar-wrapper {
+      margin-top: 1rem;
+    }
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 5px;
-      margin-top: 1rem;
+    }
+    .day-name {
+      font-weight: bold;
+      background: #ddd;
+      padding: 5px;
+      border-radius: 4px;
     }
     .day {
       padding: 10px;
@@ -118,8 +124,9 @@
       color: white;
       font-weight: bold;
     }
-    .day:hover {
-      background: #ddd;
+    .day.empty {
+      background: transparent;
+      cursor: default;
     }
   </style>
 </head>
@@ -148,34 +155,20 @@
   </div>
 
   <!-- Calendar -->
-  <div class="calendar-grid" id="calendarGrid"></div>
+  <div class="calendar-wrapper">
+    <h3 id="monthLabel"></h3>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
 
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
-<!-- Preplanned Planner -->
-<div id="planner" class="tab">
-  <h2>📝 Preplanned Planner</h2>
-  <p>A prefilled schedule of common tasks will go here.</p>
-  <button class="back" onclick="showTab('home')">⬅ Back</button>
-</div>
-
-<!-- Customise -->
-<div id="customise" class="tab">
-  <h2>🎨 Customise Tasks</h2>
-  <p>Your rainbow pills will go here.</p>
-  <button class="back" onclick="showTab('home')">⬅ Back</button>
-</div>
-
-<!-- Settings -->
-<div id="settings" class="tab">
-  <h2>⚙️ Settings</h2>
-  <p>Customise your preferences here.</p>
-  <button class="back" onclick="showTab('home')">⬅ Back</button>
-</div>
+<!-- Other Tabs -->
+<div id="planner" class="tab"><h2>📝 Preplanned Planner</h2><button class="back" onclick="showTab('home')">⬅ Back</button></div>
+<div id="customise" class="tab"><h2>🎨 Customise Tasks</h2><button class="back" onclick="showTab('home')">⬅ Back</button></div>
+<div id="settings" class="tab"><h2>⚙️ Settings</h2><button class="back" onclick="showTab('home')">⬅ Back</button></div>
 
 <script>
-  // Switch between tabs
   function showTab(tabName) {
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
@@ -188,7 +181,6 @@
     "Wipe kitchen counters",
     "Take out rubbish"
   ];
-
   const taskListDiv = document.getElementById('taskList');
   todayTasks.forEach(task => {
     const div = document.createElement('div');
@@ -198,13 +190,36 @@
     taskListDiv.appendChild(div);
   });
 
-  // Build calendar
+  // Calendar generation
   const calendarGrid = document.getElementById('calendarGrid');
+  const monthLabel = document.getElementById('monthLabel');
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth();
+
+  const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  monthLabel.innerText = `${monthNames[month]} ${year}`;
+
+  const firstDay = new Date(year, month, 1).getDay(); // Sunday=0
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+  // Day names
+  const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  dayNames.forEach(name => {
+    const div = document.createElement('div');
+    div.className = 'day-name';
+    div.innerText = name;
+    calendarGrid.appendChild(div);
+  });
+
+  // Empty cells before first day
+  for (let i = 0; i < firstDay; i++) {
+    const emptyDiv = document.createElement('div');
+    emptyDiv.className = 'day empty';
+    calendarGrid.appendChild(emptyDiv);
+  }
+
+  // Fill actual days
   for (let d = 1; d <= daysInMonth; d++) {
     const dayDiv = document.createElement('div');
     dayDiv.className = 'day';
