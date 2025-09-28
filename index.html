@@ -24,9 +24,9 @@
       height: calc(100% - 60px);
     }
 
-    .grid-7 {
+    .grid-10 {
       display: grid;
-      grid-template-rows: repeat(7, 1fr);
+      grid-template-rows: repeat(10, 1fr);
       height: calc(100% - 60px);
     }
 
@@ -44,13 +44,16 @@
     .create { background: #fff3cd; }     /* yellow */
     .settings { background: #e0f7fa; }   /* teal */
 
-    .daily { background: #ffe0e9; }      /* pink */
-    .weekly { background: #fff3cd; }     /* yellow */
-    .monthly { background: #e0f7fa; }    /* teal */
-    .quarterly { background: #e8f5e9; }  /* mint */
-    .deep { background: #f3e5f5; }       /* lavender */
-    .seasonal { background: #ffecb3; }   /* soft orange */
-    .outside { background: #c8e6c9; }    /* light green */
+    .daily { background: #ffe0e9; }        /* pink */
+    .twice { background: #ffd9b3; }        /* peach */
+    .weekly { background: #fff3cd; }       /* yellow */
+    .monthly { background: #e0f7fa; }      /* teal */
+    .quarterly { background: #e8f5e9; }    /* mint */
+    .deep { background: #f3e5f5; }         /* lavender */
+    .seasonal { background: #ffecb3; }     /* soft orange */
+    .outside { background: #c8e6c9; }      /* light green */
+    .festive { background: #ffe4e1; }      /* pastel rose */
+    .yearly { background: #d1c4e9; }       /* soft purple */
 
     /* Tabs */
     .tab { display: none; padding: 2rem; text-align: center; height: 100%; overflow-y: auto; }
@@ -86,14 +89,17 @@
 <!-- Create Cleaning Hub -->
 <div id="create" class="tab">
   <h2>🧽 Create Cleaning Hub</h2>
-  <div class="grid-7">
+  <div class="grid-10">
     <div class="tile daily" onclick="showTab('daily')">🌞 Daily</div>
+    <div class="tile twice" onclick="showTab('twice')">🔁 Twice a Week</div>
     <div class="tile weekly" onclick="showTab('weekly')">📆 Weekly</div>
     <div class="tile monthly" onclick="showTab('monthly')">🗓 Monthly</div>
     <div class="tile quarterly" onclick="showTab('quarterly')">📊 Quarterly</div>
     <div class="tile deep" onclick="showTab('deep')">🧹 Deep</div>
     <div class="tile seasonal" onclick="showTab('seasonal')">🍂 Seasonal</div>
     <div class="tile outside" onclick="showTab('outside')">🌳 Outside Areas</div>
+    <div class="tile festive" onclick="showTab('festive')">🎉 Festive</div>
+    <div class="tile yearly" onclick="showTab('yearly')">🗓 Yearly</div>
   </div>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
@@ -107,12 +113,15 @@
 
 <!-- Individual Cleaning Category Tabs -->
 <div id="daily" class="tab"><h2>🌞 Daily Tasks</h2><p>List daily chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="twice" class="tab"><h2>🔁 Twice a Week Tasks</h2><p>List chores done twice a week here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 <div id="weekly" class="tab"><h2>📆 Weekly Tasks</h2><p>List weekly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 <div id="monthly" class="tab"><h2>🗓 Monthly Tasks</h2><p>List monthly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 <div id="quarterly" class="tab"><h2>📊 Quarterly Tasks</h2><p>List quarterly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 <div id="deep" class="tab"><h2>🧹 Deep Cleaning</h2><p>List deep cleaning chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 <div id="seasonal" class="tab"><h2>🍂 Seasonal Cleaning</h2><p>List seasonal chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 <div id="outside" class="tab"><h2>🌳 Outside Areas</h2><p>List outdoor chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="festive" class="tab"><h2>🎉 Festive Cleaning</h2><p>List festive/holiday chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="yearly" class="tab"><h2>🗓 Yearly Cleaning</h2><p>List yearly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 
 <script>
   // Tab navigation
