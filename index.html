@@ -10,61 +10,56 @@
       font-family: Arial, sans-serif;
     }
 
-    /* Pastel rainbow header */
+    /* Header */
     header {
       background: linear-gradient(90deg, #ffe0e9, #fff3cd, #e0f7fa, #e8f5e9);
       color: #333; text-align: center;
       padding: 1rem; font-size: 1.5rem; font-weight: bold;
     }
 
-    /* Home screen grid with 3 rows */
-    .grid {
+    /* Grid layouts */
+    .grid-3 {
       display: grid;
       grid-template-rows: 1fr 1fr 1fr;
-      height: calc(100% - 60px); /* full height minus header */
+      height: calc(100% - 60px);
     }
 
+    .grid-7 {
+      display: grid;
+      grid-template-rows: repeat(7, 1fr);
+      height: calc(100% - 60px);
+    }
+
+    /* Tiles */
     .tile {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      font-weight: bold;
-      cursor: pointer;
-      color: #333;
-      text-align: center;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: bold; cursor: pointer;
+      color: #333; text-align: center;
       transition: transform 0.2s, opacity 0.2s;
     }
+    .tile:hover { transform: scale(1.02); opacity: 0.9; }
 
-    .tile:hover {
-      transform: scale(1.02);
-      opacity: 0.9;
-    }
+    /* Pastel rainbow colours */
+    .calendar { background: #ffe0e9; }   /* pink */
+    .create { background: #fff3cd; }     /* yellow */
+    .settings { background: #e0f7fa; }   /* teal */
 
-    /* Pastel rainbow row colours */
-    .calendar { background: #ffe0e9; }   /* pastel pink */
-    .create { background: #fff3cd; }     /* pastel yellow */
-    .settings { background: #e0f7fa; }   /* pastel teal */
+    .daily { background: #ffe0e9; }      /* pink */
+    .weekly { background: #fff3cd; }     /* yellow */
+    .monthly { background: #e0f7fa; }    /* teal */
+    .quarterly { background: #e8f5e9; }  /* mint */
+    .deep { background: #f3e5f5; }       /* lavender */
+    .seasonal { background: #ffecb3; }   /* soft orange */
+    .outside { background: #c8e6c9; }    /* light green */
 
     /* Tabs */
-    .tab {
-      display: none;
-      padding: 2rem;
-      text-align: center;
-      height: 100%;
-      overflow-y: auto;
-    }
+    .tab { display: none; padding: 2rem; text-align: center; height: 100%; overflow-y: auto; }
     .tab.active { display: block; }
 
     button.back {
-      margin-top: 2rem;
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      background: #4CAF50;
-      color: white;
-      cursor: pointer;
+      margin-top: 2rem; padding: 1rem 2rem;
+      font-size: 1rem; border: none; border-radius: 8px;
+      background: #4CAF50; color: white; cursor: pointer;
     }
   </style>
 </head>
@@ -74,7 +69,7 @@
 
 <!-- Home Hub -->
 <div id="home" class="tab active">
-  <div class="grid">
+  <div class="grid-3">
     <div class="tile calendar" onclick="showTab('calendar')">📅 Calendar</div>
     <div class="tile create" onclick="showTab('create')">🧽 Create Cleaning</div>
     <div class="tile settings" onclick="showTab('settings')">⚙️ Settings</div>
@@ -88,10 +83,18 @@
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
-<!-- Create Cleaning Tab -->
+<!-- Create Cleaning Hub -->
 <div id="create" class="tab">
-  <h2>🧽 Create Cleaning</h2>
-  <p>Here you’ll build or customise your cleaning schedules.</p>
+  <h2>🧽 Create Cleaning Hub</h2>
+  <div class="grid-7">
+    <div class="tile daily" onclick="showTab('daily')">🌞 Daily</div>
+    <div class="tile weekly" onclick="showTab('weekly')">📆 Weekly</div>
+    <div class="tile monthly" onclick="showTab('monthly')">🗓 Monthly</div>
+    <div class="tile quarterly" onclick="showTab('quarterly')">📊 Quarterly</div>
+    <div class="tile deep" onclick="showTab('deep')">🧹 Deep</div>
+    <div class="tile seasonal" onclick="showTab('seasonal')">🍂 Seasonal</div>
+    <div class="tile outside" onclick="showTab('outside')">🌳 Outside Areas</div>
+  </div>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
@@ -102,8 +105,17 @@
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
+<!-- Individual Cleaning Category Tabs -->
+<div id="daily" class="tab"><h2>🌞 Daily Tasks</h2><p>List daily chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="weekly" class="tab"><h2>📆 Weekly Tasks</h2><p>List weekly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="monthly" class="tab"><h2>🗓 Monthly Tasks</h2><p>List monthly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="quarterly" class="tab"><h2>📊 Quarterly Tasks</h2><p>List quarterly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="deep" class="tab"><h2>🧹 Deep Cleaning</h2><p>List deep cleaning chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="seasonal" class="tab"><h2>🍂 Seasonal Cleaning</h2><p>List seasonal chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="outside" class="tab"><h2>🌳 Outside Areas</h2><p>List outdoor chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+
 <script>
-  // Simple tab navigation
+  // Tab navigation
   function showTab(tabName) {
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
