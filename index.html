@@ -21,13 +21,12 @@
       font-weight: bold;
     }
 
-    /* Home: 4 full-width tiles stacked */
+    /* Home = 4 tiles stacked */
     .grid {
       display: grid;
       grid-template-rows: 1fr 1fr 1fr 1fr;
       height: calc(100% - 60px);
     }
-
     .tile {
       display: flex;
       align-items: center;
@@ -36,32 +35,15 @@
       font-weight: bold;
       cursor: pointer;
       color: #333;
-      text-align: center;
-      transition: transform 0.2s, opacity 0.2s;
     }
-
-    .tile:hover {
-      transform: scale(1.02);
-      opacity: 0.9;
-    }
-
-    /* Pastel rainbow colours */
     .calendar { background: #ffe0e9; }
     .planner { background: #fff3cd; }
     .customise { background: #e0f7fa; }
     .settings { background: #e8f5e9; }
 
     /* Tabs */
-    .tab {
-      display: none;
-      height: calc(100% - 60px);
-      padding: 1rem;
-      text-align: center;
-      overflow-y: auto;
-    }
-    .tab.active {
-      display: block;
-    }
+    .tab { display: none; height: calc(100% - 60px); padding: 1rem; }
+    .tab.active { display: block; }
 
     button.back {
       margin-top: 1rem;
@@ -74,17 +56,13 @@
       cursor: pointer;
     }
 
-    /* Today's task box */
+    /* Today’s Tasks */
     .today-tasks {
       background: #f9f9f9;
       border: 2px solid #ccc;
       border-radius: 10px;
       padding: 1rem;
       margin-bottom: 1rem;
-      text-align: left;
-    }
-    .today-tasks h3 {
-      margin-top: 0;
     }
     .task-item {
       padding: 0.5rem;
@@ -98,10 +76,7 @@
       text-decoration: line-through;
     }
 
-    /* Calendar grid */
-    .calendar-wrapper {
-      margin-top: 1rem;
-    }
+    /* Calendar */
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -112,11 +87,13 @@
       background: #ddd;
       padding: 5px;
       border-radius: 4px;
+      text-align: center;
     }
     .day {
       padding: 10px;
       border-radius: 6px;
       background: #f0f0f0;
+      text-align: center;
       cursor: pointer;
     }
     .day.today {
@@ -124,10 +101,7 @@
       color: white;
       font-weight: bold;
     }
-    .day.empty {
-      background: transparent;
-      cursor: default;
-    }
+    .day.empty { background: transparent; cursor: default; }
   </style>
 </head>
 <body>
@@ -148,17 +122,13 @@
 <div id="calendar" class="tab">
   <h2>📅 Calendar Hub</h2>
 
-  <!-- Today’s tasks -->
   <div class="today-tasks" id="todayTasks">
     <h3>Tasks for Today</h3>
     <div id="taskList"></div>
   </div>
 
-  <!-- Calendar -->
-  <div class="calendar-wrapper">
-    <h3 id="monthLabel"></h3>
-    <div class="calendar-grid" id="calendarGrid"></div>
-  </div>
+  <h3 id="monthLabel"></h3>
+  <div class="calendar-grid" id="calendarGrid"></div>
 
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
@@ -169,18 +139,14 @@
 <div id="settings" class="tab"><h2>⚙️ Settings</h2><button class="back" onclick="showTab('home')">⬅ Back</button></div>
 
 <script>
+  // Tab switching
   function showTab(tabName) {
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
   }
 
   // Example tasks for today
-  const todayTasks = [
-    "Make beds",
-    "Load/unload dishwasher",
-    "Wipe kitchen counters",
-    "Take out rubbish"
-  ];
+  const todayTasks = ["Make beds","Load/unload dishwasher","Wipe kitchen counters","Take out rubbish"];
   const taskListDiv = document.getElementById('taskList');
   todayTasks.forEach(task => {
     const div = document.createElement('div');
@@ -190,7 +156,7 @@
     taskListDiv.appendChild(div);
   });
 
-  // Calendar generation
+  // Calendar rendering
   const calendarGrid = document.getElementById('calendarGrid');
   const monthLabel = document.getElementById('monthLabel');
   const today = new Date();
@@ -200,32 +166,29 @@
   const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   monthLabel.innerText = `${monthNames[month]} ${year}`;
 
-  const firstDay = new Date(year, month, 1).getDay(); // Sunday=0
+  const firstDay = new Date(year, month, 1).getDay(); // 0=Sunday
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   // Day names
-  const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  dayNames.forEach(name => {
+  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(name => {
     const div = document.createElement('div');
     div.className = 'day-name';
     div.innerText = name;
     calendarGrid.appendChild(div);
   });
 
-  // Empty cells before first day
+  // Empty slots before month starts
   for (let i = 0; i < firstDay; i++) {
-    const emptyDiv = document.createElement('div');
-    emptyDiv.className = 'day empty';
-    calendarGrid.appendChild(emptyDiv);
+    const div = document.createElement('div');
+    div.className = 'day empty';
+    calendarGrid.appendChild(div);
   }
 
-  // Fill actual days
+  // Actual days
   for (let d = 1; d <= daysInMonth; d++) {
     const dayDiv = document.createElement('div');
     dayDiv.className = 'day';
-    if (d === today.getDate()) {
-      dayDiv.classList.add('today');
-    }
+    if (d === today.getDate()) { dayDiv.classList.add('today'); }
     dayDiv.innerText = d;
     dayDiv.onclick = () => alert("Tasks for " + d + "/" + (month+1) + "/" + year);
     calendarGrid.appendChild(dayDiv);
