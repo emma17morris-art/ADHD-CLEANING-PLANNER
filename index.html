@@ -5,72 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ADHD Cleaning Planner 🌈</title>
   <style>
-    body, html {
-      margin: 0; padding: 0; height: 100%;
-      font-family: Arial, sans-serif;
-    }
+    body, html { margin:0; padding:0; font-family:Arial, sans-serif; height:100%; }
+    header { background:linear-gradient(90deg,#ffe0e9,#fff3cd,#e0f7fa,#e8f5e9);
+      padding:1rem; font-size:1.5rem; font-weight:bold; text-align:center; }
 
-    /* Header */
-    header {
-      background: linear-gradient(90deg, #ffe0e9, #fff3cd, #e0f7fa, #e8f5e9);
-      color: #333; text-align: center;
-      padding: 1rem; font-size: 1.5rem; font-weight: bold;
-    }
+    .grid-3 { display:grid; grid-template-rows:repeat(3,1fr); height:calc(100% - 60px); }
+    .grid-10 { display:grid; grid-template-rows:repeat(10,1fr); height:calc(100% - 60px); }
 
-    /* Grid layouts */
-    .grid-3 {
-      display: grid;
-      grid-template-rows: 1fr 1fr 1fr;
-      height: calc(100% - 60px);
-    }
+    .tile { display:flex; justify-content:center; align-items:center;
+      font-size:1.4rem; font-weight:bold; cursor:pointer; }
+    .tile:hover { opacity:0.9; }
 
-    .grid-10 {
-      display: grid;
-      grid-template-rows: repeat(10, 1fr);
-      height: calc(100% - 60px);
-    }
+    .calendar{background:#ffe0e9;} .create{background:#fff3cd;} .settings{background:#e0f7fa;}
+    .daily{background:#ffe0e9;} .twice{background:#ffd9b3;} .weekly{background:#fff3cd;}
+    .monthly{background:#e0f7fa;} .quarterly{background:#e8f5e9;} .deep{background:#f3e5f5;}
+    .seasonal{background:#ffecb3;} .outside{background:#c8e6c9;} .festive{background:#ffe4e1;}
+    .yearly{background:#d1c4e9;}
 
-    /* Tiles */
-    .tile {
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; font-weight: bold; cursor: pointer;
-      color: #333; text-align: center;
-      transition: transform 0.2s, opacity 0.2s;
-    }
-    .tile:hover { transform: scale(1.02); opacity: 0.9; }
+    .tab { display:none; padding:1rem; height:calc(100% - 60px); overflow-y:auto; }
+    .tab.active { display:block; }
 
-    /* Pastel rainbow colours */
-    .calendar { background: #ffe0e9; }   /* pink */
-    .create { background: #fff3cd; }     /* yellow */
-    .settings { background: #e0f7fa; }   /* teal */
+    button.back { margin-top:1rem; padding:0.7rem 1.2rem; background:#4CAF50; color:white;
+      border:none; border-radius:8px; cursor:pointer; }
 
-    .daily { background: #ffe0e9; }        /* pink */
-    .twice { background: #ffd9b3; }        /* peach */
-    .weekly { background: #fff3cd; }       /* yellow */
-    .monthly { background: #e0f7fa; }      /* teal */
-    .quarterly { background: #e8f5e9; }    /* mint */
-    .deep { background: #f3e5f5; }         /* lavender */
-    .seasonal { background: #ffecb3; }     /* soft orange */
-    .outside { background: #c8e6c9; }      /* light green */
-    .festive { background: #ffe4e1; }      /* pastel rose */
-    .yearly { background: #d1c4e9; }       /* soft purple */
-
-    /* Tabs */
-    .tab { display: none; padding: 2rem; text-align: center; height: 100%; overflow-y: auto; }
-    .tab.active { display: block; }
-
-    button.back {
-      margin-top: 2rem; padding: 1rem 2rem;
-      font-size: 1rem; border: none; border-radius: 8px;
-      background: #4CAF50; color: white; cursor: pointer;
-    }
+    /* Task toggle list */
+    .task { display:flex; align-items:center; justify-content:space-between;
+      padding:0.5rem; margin:0.3rem 0; border:1px solid #ccc; border-radius:6px; background:#f9f9f9; }
+    .task input { transform:scale(1.4); }
   </style>
 </head>
 <body>
 
 <header>ADHD Cleaning Planner</header>
 
-<!-- Home Hub -->
+<!-- Home -->
 <div id="home" class="tab active">
   <div class="grid-3">
     <div class="tile calendar" onclick="showTab('calendar')">📅 Calendar</div>
@@ -79,10 +47,10 @@
   </div>
 </div>
 
-<!-- Calendar Tab -->
+<!-- Calendar -->
 <div id="calendar" class="tab">
   <h2>📅 Calendar Hub</h2>
-  <p>Your calendar with tasks will go here.</p>
+  <div id="calendarTasks"></div>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
@@ -104,30 +72,90 @@
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
-<!-- Settings Tab -->
+<!-- Settings -->
 <div id="settings" class="tab">
   <h2>⚙️ Settings</h2>
-  <p>Customise your preferences here.</p>
+  <p>Preferences go here.</p>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
-<!-- Individual Cleaning Category Tabs -->
-<div id="daily" class="tab"><h2>🌞 Daily Tasks</h2><p>List daily chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
-<div id="twice" class="tab"><h2>🔁 Twice a Week Tasks</h2><p>List chores done twice a week here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
-<div id="weekly" class="tab"><h2>📆 Weekly Tasks</h2><p>List weekly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
-<div id="monthly" class="tab"><h2>🗓 Monthly Tasks</h2><p>List monthly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
-<div id="quarterly" class="tab"><h2>📊 Quarterly Tasks</h2><p>List quarterly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
-<div id="deep" class="tab"><h2>🧹 Deep Cleaning</h2><p>List deep cleaning chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
-<div id="seasonal" class="tab"><h2>🍂 Seasonal Cleaning</h2><p>List seasonal chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
-<div id="outside" class="tab"><h2>🌳 Outside Areas</h2><p>List outdoor chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
-<div id="festive" class="tab"><h2>🎉 Festive Cleaning</h2><p>List festive/holiday chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
-<div id="yearly" class="tab"><h2>🗓 Yearly Cleaning</h2><p>List yearly chores here.</p><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<!-- Example Category (Daily) -->
+<div id="daily" class="tab">
+  <h2>🌞 Daily Tasks</h2>
+  <div id="dailyTasks"></div>
+  <button class="back" onclick="showTab('create')">⬅ Back</button>
+</div>
+
+<!-- Placeholder Tabs for others -->
+<div id="twice" class="tab"><h2>🔁 Twice a Week</h2><div id="twiceTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="weekly" class="tab"><h2>📆 Weekly</h2><div id="weeklyTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="monthly" class="tab"><h2>🗓 Monthly</h2><div id="monthlyTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="quarterly" class="tab"><h2>📊 Quarterly</h2><div id="quarterlyTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="deep" class="tab"><h2>🧹 Deep</h2><div id="deepTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="seasonal" class="tab"><h2>🍂 Seasonal</h2><div id="seasonalTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="outside" class="tab"><h2>🌳 Outside</h2><div id="outsideTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="festive" class="tab"><h2>🎉 Festive</h2><div id="festiveTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
+<div id="yearly" class="tab"><h2>🗓 Yearly</h2><div id="yearlyTasks"></div><button class="back" onclick="showTab('create')">⬅ Back</button></div>
 
 <script>
-  // Tab navigation
+  // Data: example autofill tasks
+  const taskData = {
+    daily: ["Make beds","Load/unload dishwasher","Wipe counters","Sweep floors","Take out rubbish"],
+    twice: ["Vacuum high-traffic areas","Wash towels","Mop kitchen"],
+    weekly: ["Change bed sheets","Clean toilets","Dust furniture"],
+    monthly: ["Deep clean fridge","Vacuum upholstery","Rotate mattress"],
+    quarterly: ["Wash curtains","Clean air vents"],
+    deep: ["Steam clean carpets","Clean behind appliances"],
+    seasonal: ["Organise decorations","Clean gutters"],
+    outside: ["Mow lawn","Wash car"],
+    festive: ["Put up decorations","Clean dining room"],
+    yearly: ["Service boiler","Check smoke alarm batteries"]
+  };
+
+  // Store toggled tasks
+  let selectedTasks = {};
+
+  // Render checklists
+  function renderCategory(cat) {
+    const container = document.getElementById(cat+"Tasks");
+    container.innerHTML = "";
+    taskData[cat].forEach(task => {
+      const div = document.createElement("div");
+      div.className = "task";
+      div.innerHTML = `<span>${task}</span><input type="checkbox" onchange="toggleTask('${cat}','${task}',this)">`;
+      container.appendChild(div);
+    });
+  }
+
+  // Save toggle
+  function toggleTask(cat, task, checkbox) {
+    if (!selectedTasks[cat]) selectedTasks[cat] = [];
+    if (checkbox.checked) {
+      selectedTasks[cat].push(task);
+    } else {
+      selectedTasks[cat] = selectedTasks[cat].filter(t => t !== task);
+    }
+  }
+
+  // Show tasks in calendar (preview only)
+  function showCalendarTasks() {
+    const div = document.getElementById("calendarTasks");
+    div.innerHTML = "<h3>Tasks You Selected</h3>";
+    for (let cat in selectedTasks) {
+      if (selectedTasks[cat].length) {
+        const section = document.createElement("div");
+        section.innerHTML = `<strong>${cat.toUpperCase()}:</strong> ${selectedTasks[cat].join(", ")}`;
+        div.appendChild(section);
+      }
+    }
+  }
+
+  // Tabs
   function showTab(tabName) {
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabName).classList.add('active');
+    document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+    document.getElementById(tabName).classList.add("active");
+    if (tabName === "calendar") showCalendarTasks();
+    if (taskData[tabName]) renderCategory(tabName);
   }
 </script>
 
