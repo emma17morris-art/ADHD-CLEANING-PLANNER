@@ -11,21 +11,16 @@
     }
     header {
       background: linear-gradient(90deg, #ffe0e9, #fff3cd, #e0f7fa, #e8f5e9);
-      color: #333;
-      text-align: center;
-      padding: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
+      color: #333; text-align: center; padding: 1rem;
+      font-size: 1.5rem; font-weight: bold;
     }
     .grid {
-      display: grid;
-      grid-template-rows: 1fr 1fr 1fr 1fr;
+      display: grid; grid-template-rows: 1fr 1fr 1fr 1fr;
       height: calc(100% - 60px);
     }
     .tile {
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; font-weight: bold;
-      cursor: pointer; color: #333;
+      font-size: 1.6rem; font-weight: bold; cursor: pointer; color: #333;
     }
     .calendar { background: #ffe0e9; }
     .planner { background: #fff3cd; }
@@ -75,12 +70,12 @@
 
 <!-- Preplanned Planner -->
 <div id="planner" class="tab">
-  <h2>📝 Preplanned Weekly Planner</h2>
+  <h2>📝 Preplanned Cleaning Schedule</h2>
   <div id="plannerContent"></div>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
-<!-- Placeholder Tabs -->
+<!-- Other Tabs -->
 <div id="calendar" class="tab"><h2>📅 Calendar Hub</h2><button class="back" onclick="showTab('home')">⬅ Back</button></div>
 <div id="customise" class="tab"><h2>🎨 Customise Tasks</h2><button class="back" onclick="showTab('home')">⬅ Back</button></div>
 <div id="settings" class="tab"><h2>⚙️ Settings</h2><button class="back" onclick="showTab('home')">⬅ Back</button></div>
@@ -91,15 +86,36 @@
     document.getElementById(tabName).classList.add('active');
   }
 
-  // Preplanned weekly tasks (ADHD-friendly: spread evenly, not overwhelming)
+  // Preplanned Weekly Cleaning Schedule
   const weeklyPlan = {
-    "Monday": ["Change bed sheets", "Quick tidy lounge", "Laundry: wash & fold"],
-    "Tuesday": ["Deep clean fridge", "Vacuum downstairs", "Empty bins"],
-    "Wednesday": ["Wipe kitchen counters", "Clean microwave", "Dust shelves"],
-    "Thursday": ["Clean bathroom", "Wash towels & bath mats", "Declutter drawer"],
-    "Friday": ["Vacuum upstairs", "Mop floors", "Meal plan & grocery shop"],
-    "Saturday": ["Garden: mow/trim", "Wash car", "Organise kids’ clothes"],
-    "Sunday": ["Spring clean one room", "Check smoke alarm batteries", "Restock supplies"]
+    "Monday": [
+      "Make beds", "Load/unload dishwasher", "Wipe kitchen counters",
+      "Laundry: wash & fold", "Vacuum high-traffic floors"
+    ],
+    "Tuesday": [
+      "Make beds", "Tidy toys & living areas", "Dust furniture",
+      "Clean microwave & appliances", "Empty bins"
+    ],
+    "Wednesday": [
+      "Make beds", "Wipe bathroom sinks & mirrors", "Change bed sheets",
+      "Laundry: towels", "Vacuum downstairs"
+    ],
+    "Thursday": [
+      "Make beds", "Wipe kitchen counters & dining table", "Clean toilets",
+      "Mop floors", "Declutter one drawer"
+    ],
+    "Friday": [
+      "Make beds", "Meal plan & grocery shop", "Vacuum upstairs",
+      "Dust shelves", "Laundry: kids’ clothes"
+    ],
+    "Saturday": [
+      "Make beds", "Garden/yard tidy", "Wash car",
+      "Organise seasonal items", "Family tidy-up hour"
+    ],
+    "Sunday": [
+      "Make beds", "Full house reset (quick tidy everywhere)",
+      "Check smoke alarm batteries", "Restock cleaning supplies"
+    ]
   };
 
   const plannerContent = document.getElementById('plannerContent');
