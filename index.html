@@ -21,7 +21,7 @@
       font-weight: bold;
     }
 
-    /* Home grid (4 pastel tiles in 4 rows) */
+    /* Home: 4 full-width tiles */
     .grid {
       display: grid;
       grid-template-rows: 1fr 1fr 1fr 1fr;
@@ -35,9 +35,9 @@
       font-size: 1.6rem;
       font-weight: bold;
       cursor: pointer;
-      transition: transform 0.2s, opacity 0.2s;
       color: #333;
       text-align: center;
+      transition: transform 0.2s, opacity 0.2s;
     }
 
     .tile:hover {
@@ -45,6 +45,7 @@
       opacity: 0.9;
     }
 
+    /* Pastel rainbow colours */
     .calendar { background: #ffe0e9; }
     .planner { background: #fff3cd; }
     .customise { background: #e0f7fa; }
@@ -64,7 +65,7 @@
 
     button.back {
       margin-top: 1rem;
-      padding: 0.5rem 1rem;
+      padding: 0.7rem 1.5rem;
       font-size: 1rem;
       border: none;
       border-radius: 8px;
@@ -73,16 +74,16 @@
       cursor: pointer;
     }
 
-    /* Today's task box */
+    /* Tasks box */
     .today-tasks {
       background: #f9f9f9;
       border: 2px solid #ccc;
       border-radius: 10px;
       padding: 1rem;
-      height: 50%;
-      overflow-y: auto;
       margin-bottom: 1rem;
       text-align: left;
+      max-height: 45%;
+      overflow-y: auto;
     }
     .today-tasks h3 {
       margin-top: 0;
@@ -99,11 +100,12 @@
       text-decoration: line-through;
     }
 
-    /* Calendar at bottom */
+    /* Calendar grid */
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 5px;
+      margin-top: 1rem;
     }
     .day {
       padding: 10px;
@@ -138,14 +140,14 @@
 <!-- Calendar Hub -->
 <div id="calendar" class="tab">
   <h2>📅 Calendar Hub</h2>
-  
-  <!-- Big Today Box -->
+
+  <!-- Today’s tasks -->
   <div class="today-tasks" id="todayTasks">
     <h3>Tasks for Today</h3>
     <div id="taskList"></div>
   </div>
 
-  <!-- Calendar Grid -->
+  <!-- Calendar -->
   <div class="calendar-grid" id="calendarGrid"></div>
 
   <button class="back" onclick="showTab('home')">⬅ Back</button>
@@ -161,7 +163,7 @@
 <!-- Customise -->
 <div id="customise" class="tab">
   <h2>🎨 Customise Tasks</h2>
-  <p>Rainbow pills will go here.</p>
+  <p>Your rainbow pills will go here.</p>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
@@ -173,13 +175,13 @@
 </div>
 
 <script>
-  // Tab switching
+  // Switch between tabs
   function showTab(tabName) {
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
   }
 
-  // Example "Today" tasks
+  // Example tasks for today
   const todayTasks = [
     "Make beds",
     "Load/unload dishwasher",
@@ -196,7 +198,7 @@
     taskListDiv.appendChild(div);
   });
 
-  // Calendar generation
+  // Build calendar
   const calendarGrid = document.getElementById('calendarGrid');
   const today = new Date();
   const year = today.getFullYear();
@@ -210,7 +212,7 @@
       dayDiv.classList.add('today');
     }
     dayDiv.innerText = d;
-    dayDiv.onclick = () => alert("Tasks for " + d + "/" + (month+1));
+    dayDiv.onclick = () => alert("Tasks for " + d + "/" + (month+1) + "/" + year);
     calendarGrid.appendChild(dayDiv);
   }
 </script>
