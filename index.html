@@ -12,7 +12,6 @@
       font-family: Arial, sans-serif;
     }
 
-    /* Pastel rainbow header */
     header {
       background: linear-gradient(90deg, #ffe0e9, #fff3cd, #e0f7fa, #e8f5e9);
       color: #333;
@@ -22,11 +21,11 @@
       font-weight: bold;
     }
 
-    /* Home screen tiles as 4 rows */
+    /* Home grid (4 pastel tiles in 4 rows) */
     .grid {
       display: grid;
       grid-template-rows: 1fr 1fr 1fr 1fr;
-      height: calc(100% - 60px); /* full height minus header */
+      height: calc(100% - 60px);
     }
 
     .tile {
@@ -46,18 +45,17 @@
       opacity: 0.9;
     }
 
-    /* Pastel rainbow row colours */
-    .calendar { background: #ffe0e9; }   /* pastel pink */
-    .planner { background: #fff3cd; }    /* pastel yellow */
-    .customise { background: #e0f7fa; }  /* pastel teal */
-    .settings { background: #e8f5e9; }   /* pastel green */
+    .calendar { background: #ffe0e9; }
+    .planner { background: #fff3cd; }
+    .customise { background: #e0f7fa; }
+    .settings { background: #e8f5e9; }
 
     /* Tabs */
     .tab {
       display: none;
-      padding: 2rem;
+      height: calc(100% - 60px);
+      padding: 1rem;
       text-align: center;
-      height: 100%;
       overflow-y: auto;
     }
     .tab.active {
@@ -65,8 +63,8 @@
     }
 
     button.back {
-      margin-top: 2rem;
-      padding: 1rem 2rem;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
       font-size: 1rem;
       border: none;
       border-radius: 8px;
@@ -74,13 +72,60 @@
       color: white;
       cursor: pointer;
     }
+
+    /* Today's task box */
+    .today-tasks {
+      background: #f9f9f9;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 1rem;
+      height: 50%;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    .today-tasks h3 {
+      margin-top: 0;
+    }
+    .task-item {
+      padding: 0.5rem;
+      margin: 0.3rem 0;
+      border-radius: 6px;
+      background: #e0f7fa;
+      cursor: pointer;
+    }
+    .task-item.done {
+      background: #c8e6c9;
+      text-decoration: line-through;
+    }
+
+    /* Calendar at bottom */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    .day {
+      padding: 10px;
+      border-radius: 6px;
+      background: #f0f0f0;
+      cursor: pointer;
+    }
+    .day.today {
+      background: #4CAF50;
+      color: white;
+      font-weight: bold;
+    }
+    .day:hover {
+      background: #ddd;
+    }
   </style>
 </head>
 <body>
 
 <header>ADHD Cleaning Planner</header>
 
-<!-- Home Page with 4 full-width pastel rows -->
+<!-- Home -->
 <div id="home" class="tab active">
   <div class="grid">
     <div class="tile calendar" onclick="showTab('calendar')">📅 Calendar</div>
@@ -90,10 +135,19 @@
   </div>
 </div>
 
-<!-- Calendar -->
+<!-- Calendar Hub -->
 <div id="calendar" class="tab">
-  <h2>📅 Calendar</h2>
-  <p>Calendar integration will go here.</p>
+  <h2>📅 Calendar Hub</h2>
+  
+  <!-- Big Today Box -->
+  <div class="today-tasks" id="todayTasks">
+    <h3>Tasks for Today</h3>
+    <div id="taskList"></div>
+  </div>
+
+  <!-- Calendar Grid -->
+  <div class="calendar-grid" id="calendarGrid"></div>
+
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
@@ -107,7 +161,7 @@
 <!-- Customise -->
 <div id="customise" class="tab">
   <h2>🎨 Customise Tasks</h2>
-  <p>Your rainbow pills list will go here.</p>
+  <p>Rainbow pills will go here.</p>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
@@ -119,10 +173,45 @@
 </div>
 
 <script>
-  // Simple tab navigation
+  // Tab switching
   function showTab(tabName) {
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
+  }
+
+  // Example "Today" tasks
+  const todayTasks = [
+    "Make beds",
+    "Load/unload dishwasher",
+    "Wipe kitchen counters",
+    "Take out rubbish"
+  ];
+
+  const taskListDiv = document.getElementById('taskList');
+  todayTasks.forEach(task => {
+    const div = document.createElement('div');
+    div.className = 'task-item';
+    div.innerText = task;
+    div.onclick = () => div.classList.toggle('done');
+    taskListDiv.appendChild(div);
+  });
+
+  // Calendar generation
+  const calendarGrid = document.getElementById('calendarGrid');
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dayDiv = document.createElement('div');
+    dayDiv.className = 'day';
+    if (d === today.getDate()) {
+      dayDiv.classList.add('today');
+    }
+    dayDiv.innerText = d;
+    dayDiv.onclick = () => alert("Tasks for " + d + "/" + (month+1));
+    calendarGrid.appendChild(dayDiv);
   }
 </script>
 
