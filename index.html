@@ -58,6 +58,7 @@
       display: none;
       padding: 2rem;
       text-align: center;
+      overflow-y: auto;
     }
     .tab.active {
       display: block;
@@ -72,6 +73,36 @@
       background: #4CAF50;
       color: white;
       cursor: pointer;
+    }
+
+    /* Rainbow Pills */
+    .task {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      margin: 0.3rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400% 400%;
+      animation: rainbowShift 6s ease infinite;
+      transition: transform 0.1s;
+    }
+    .task:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+    .task.done {
+      background: linear-gradient(135deg, #66bb6a, #43a047);
+      text-decoration: line-through;
+      animation: none;
+    }
+
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
   </style>
 </head>
@@ -106,7 +137,9 @@
 <!-- Customise -->
 <div id="customise" class="tab">
   <h2>🎨 Customise Tasks</h2>
-  <p>Your rainbow pills list goes here.</p>
+  <p>Tap a task to mark it done ✅. Toggle again to reset.</p>
+  <div id="taskList"></div>
+  <br>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
@@ -123,6 +156,66 @@
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
   }
+
+  // Full task list for customise tab
+  const tasks = [
+    "Make beds",
+    "Load/unload dishwasher",
+    "Wipe kitchen counters & dining table",
+    "Sweep/vacuum/mop floors",
+    "Tidy toys & living areas",
+    "Take out rubbish/compost/recycling",
+    "Wipe bathroom sinks, mirrors, counters",
+    "Laundry: wash, dry, fold, put away",
+    "Change bed sheets",
+    "Wash towels & bath mats",
+    "Clean toilets",
+    "Dust furniture, shelves, TV, blinds",
+    "Empty bins in every room",
+    "Clean microwave & small appliances",
+    "Water indoor plants",
+    "Meal plan & grocery shop",
+    "Deep clean fridge & throw expired food",
+    "Wipe cabinet fronts & handles",
+    "Wash duvet covers, blankets, pillows",
+    "Clean oven & extractor hood filters",
+    "Vacuum upholstery (sofas, cushions)",
+    "Clean washing machine drum/filter",
+    "Clean dishwasher filter",
+    "Wipe skirting boards, doors, switches, remote controls",
+    "Declutter kids’ clothes, toys, or drawers",
+    "Flip/rotate mattresses",
+    "Wash curtains or window coverings",
+    "Clean behind/under fridge, washing machine, cooker",
+    "Descale kettle, coffee machine, shower heads",
+    "Restock cleaning/household supplies",
+    "Wash windows (inside/outside)",
+    "Garden/yard: mow lawn, trim hedges, sweep patio",
+    "Clean car: vacuum, wipe surfaces, check fluids",
+    "Declutter wardrobe (season change clothes)",
+    "Organise seasonal decorations (Christmas, Halloween, etc.)",
+    "Clean gutters",
+    "Service boiler/heating/air conditioning",
+    "Spring clean full house reset",
+    "Steam clean carpets or rugs",
+    "Clean garage/loft/attic/storage",
+    "Replace smoke alarm/carbon monoxide detector batteries",
+    "Replace car key, remote, clock, toy batteries",
+    "Check expiry dates in medicine cabinet & first aid kit",
+    "Service the car (MOT, oil, tyres, brakes, etc.)",
+    "Service major appliances (boiler, HVAC, water filter)",
+    "Update paperwork (insurance, school forms, tax, etc.)",
+    "Declutter digital: photos, subscriptions, files"
+  ];
+
+  const taskListDiv = document.getElementById('taskList');
+  tasks.forEach(task => {
+    const span = document.createElement('span');
+    span.className = 'task';
+    span.innerText = task;
+    span.onclick = () => span.classList.toggle('done');
+    taskListDiv.appendChild(span);
+  });
 </script>
 
 </body>
