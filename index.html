@@ -5,41 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ADHD Cleaning Planner 🌈</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    body, html {
       margin: 0;
       padding: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
+      height: 100%;
+      font-family: Arial, sans-serif;
     }
 
-    header {
-      background: #4CAF50;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
-    /* Fullscreen grid for tiles */
+    /* Fullscreen grid for 4 tiles */
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
-      flex: 1;
+      height: 100%;
+      width: 100%;
     }
 
     .tile {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: bold;
       cursor: pointer;
       transition: transform 0.2s, opacity 0.2s;
       color: #333;
+      text-align: center;
     }
 
     .tile:hover {
@@ -58,6 +49,7 @@
       display: none;
       padding: 2rem;
       text-align: center;
+      height: 100%;
       overflow-y: auto;
     }
     .tab.active {
@@ -74,47 +66,15 @@
       color: white;
       cursor: pointer;
     }
-
-    /* Rainbow Pills */
-    .task {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      margin: 0.3rem;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: bold;
-      color: white;
-      background: linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet);
-      background-size: 400% 400%;
-      animation: rainbowShift 6s ease infinite;
-      transition: transform 0.1s;
-    }
-    .task:hover {
-      transform: scale(1.05);
-      opacity: 0.9;
-    }
-    .task.done {
-      background: linear-gradient(135deg, #66bb6a, #43a047);
-      text-decoration: line-through;
-      animation: none;
-    }
-
-    @keyframes rainbowShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
   </style>
 </head>
 <body>
 
-<header>ADHD Cleaning Planner</header>
-
-<!-- Home Page -->
+<!-- Home Page with fullscreen 4 tiles -->
 <div id="home" class="tab active">
   <div class="grid">
     <div class="tile calendar" onclick="showTab('calendar')">📅 Calendar</div>
-    <div class="tile planner" onclick="showTab('planner')">📝 Preplanned Planner</div>
+    <div class="tile planner" onclick="showTab('planner')">📝 Preplanned<br>Planner</div>
     <div class="tile customise" onclick="showTab('customise')">🎨 Customise</div>
     <div class="tile settings" onclick="showTab('settings')">⚙️ Settings</div>
   </div>
@@ -137,9 +97,7 @@
 <!-- Customise -->
 <div id="customise" class="tab">
   <h2>🎨 Customise Tasks</h2>
-  <p>Tap a task to mark it done ✅. Toggle again to reset.</p>
-  <div id="taskList"></div>
-  <br>
+  <p>Your rainbow pills list will go here.</p>
   <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
@@ -156,66 +114,6 @@
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
   }
-
-  // Full task list for customise tab
-  const tasks = [
-    "Make beds",
-    "Load/unload dishwasher",
-    "Wipe kitchen counters & dining table",
-    "Sweep/vacuum/mop floors",
-    "Tidy toys & living areas",
-    "Take out rubbish/compost/recycling",
-    "Wipe bathroom sinks, mirrors, counters",
-    "Laundry: wash, dry, fold, put away",
-    "Change bed sheets",
-    "Wash towels & bath mats",
-    "Clean toilets",
-    "Dust furniture, shelves, TV, blinds",
-    "Empty bins in every room",
-    "Clean microwave & small appliances",
-    "Water indoor plants",
-    "Meal plan & grocery shop",
-    "Deep clean fridge & throw expired food",
-    "Wipe cabinet fronts & handles",
-    "Wash duvet covers, blankets, pillows",
-    "Clean oven & extractor hood filters",
-    "Vacuum upholstery (sofas, cushions)",
-    "Clean washing machine drum/filter",
-    "Clean dishwasher filter",
-    "Wipe skirting boards, doors, switches, remote controls",
-    "Declutter kids’ clothes, toys, or drawers",
-    "Flip/rotate mattresses",
-    "Wash curtains or window coverings",
-    "Clean behind/under fridge, washing machine, cooker",
-    "Descale kettle, coffee machine, shower heads",
-    "Restock cleaning/household supplies",
-    "Wash windows (inside/outside)",
-    "Garden/yard: mow lawn, trim hedges, sweep patio",
-    "Clean car: vacuum, wipe surfaces, check fluids",
-    "Declutter wardrobe (season change clothes)",
-    "Organise seasonal decorations (Christmas, Halloween, etc.)",
-    "Clean gutters",
-    "Service boiler/heating/air conditioning",
-    "Spring clean full house reset",
-    "Steam clean carpets or rugs",
-    "Clean garage/loft/attic/storage",
-    "Replace smoke alarm/carbon monoxide detector batteries",
-    "Replace car key, remote, clock, toy batteries",
-    "Check expiry dates in medicine cabinet & first aid kit",
-    "Service the car (MOT, oil, tyres, brakes, etc.)",
-    "Service major appliances (boiler, HVAC, water filter)",
-    "Update paperwork (insurance, school forms, tax, etc.)",
-    "Declutter digital: photos, subscriptions, files"
-  ];
-
-  const taskListDiv = document.getElementById('taskList');
-  tasks.forEach(task => {
-    const span = document.createElement('span');
-    span.className = 'task';
-    span.innerText = task;
-    span.onclick = () => span.classList.toggle('done');
-    taskListDiv.appendChild(span);
-  });
 </script>
 
 </body>
