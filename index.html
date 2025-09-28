@@ -7,164 +7,122 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background: #f5f5f5;
-      color: #333;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
+
     header {
       background: #4CAF50;
       color: white;
       text-align: center;
       padding: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
     }
-    nav {
-      display: flex;
-      justify-content: space-around;
-      background: #333;
-      color: white;
-    }
-    nav button {
+
+    /* Fullscreen grid for tiles */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
       flex: 1;
-      padding: 1rem;
-      background: #333;
-      border: none;
-      color: white;
-      font-size: 1rem;
+    }
+
+    .tile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
       cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+      color: #333;
     }
-    nav button.active {
-      background: #4CAF50;
+
+    .tile:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
     }
+
+    /* Pastel rainbow colours */
+    .calendar { background: #ffe0e9; }   /* pastel pink */
+    .planner { background: #fff3cd; }    /* pastel yellow */
+    .customise { background: #e0f7fa; }  /* pastel teal */
+    .settings { background: #e8f5e9; }   /* pastel green */
+
+    /* Tabs */
     .tab {
       display: none;
-      padding: 1rem;
+      padding: 2rem;
+      text-align: center;
     }
     .tab.active {
       display: block;
     }
 
-    /* Rainbow pill styling */
-    .task {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      margin: 0.3rem;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: bold;
+    button.back {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #4CAF50;
       color: white;
-      background: linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet);
-      background-size: 400% 400%;
-      animation: rainbowShift 6s ease infinite;
-      transition: transform 0.1s;
-    }
-    .task:hover {
-      transform: scale(1.05);
-      opacity: 0.9;
-    }
-    .task.done {
-      background: linear-gradient(135deg, #66bb6a, #43a047);
-      text-decoration: line-through;
-      animation: none;
-    }
-    @keyframes rainbowShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>ADHD Cleaning Planner</h1>
-  <p>🌈 Customisable tasks with rainbow energy</p>
-</header>
+<header>ADHD Cleaning Planner</header>
 
-<nav>
-  <button id="homeBtn" class="active" onclick="showTab('home')">Home</button>
-  <button id="customBtn" onclick="showTab('customise')">Customise</button>
-</nav>
-
+<!-- Home Page -->
 <div id="home" class="tab active">
-  <h2>Welcome!</h2>
-  <p>This is your ADHD Cleaning Planner. Switch to the <b>Customise</b> tab to choose your tasks 🌈.</p>
+  <div class="grid">
+    <div class="tile calendar" onclick="showTab('calendar')">📅 Calendar</div>
+    <div class="tile planner" onclick="showTab('planner')">📝 Preplanned Planner</div>
+    <div class="tile customise" onclick="showTab('customise')">🎨 Customise</div>
+    <div class="tile settings" onclick="showTab('settings')">⚙️ Settings</div>
+  </div>
 </div>
 
+<!-- Calendar -->
+<div id="calendar" class="tab">
+  <h2>📅 Calendar</h2>
+  <p>Calendar integration will go here.</p>
+  <button class="back" onclick="showTab('home')">⬅ Back</button>
+</div>
+
+<!-- Preplanned Planner -->
+<div id="planner" class="tab">
+  <h2>📝 Preplanned Planner</h2>
+  <p>A prefilled schedule of common tasks will go here.</p>
+  <button class="back" onclick="showTab('home')">⬅ Back</button>
+</div>
+
+<!-- Customise -->
 <div id="customise" class="tab">
-  <h2>Customise Your Tasks</h2>
-  <div id="taskList"></div>
+  <h2>🎨 Customise Tasks</h2>
+  <p>Your rainbow pills list goes here.</p>
+  <button class="back" onclick="showTab('home')">⬅ Back</button>
+</div>
+
+<!-- Settings -->
+<div id="settings" class="tab">
+  <h2>⚙️ Settings</h2>
+  <p>Customise your preferences here.</p>
+  <button class="back" onclick="showTab('home')">⬅ Back</button>
 </div>
 
 <script>
-  // Tabs switching
+  // Simple tab navigation
   function showTab(tabName) {
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
-    if (tabName === "home") document.getElementById("homeBtn").classList.add('active');
-    if (tabName === "customise") document.getElementById("customBtn").classList.add('active');
   }
-
-  // Full task list
-  const tasks = [
-    "Make beds",
-    "Load/unload dishwasher",
-    "Wipe kitchen counters & dining table",
-    "Sweep/vacuum/mop floors",
-    "Tidy toys & living areas",
-    "Take out rubbish/compost/recycling",
-    "Wipe bathroom sinks, mirrors, counters",
-    "Laundry: wash, dry, fold, put away",
-    "Change bed sheets",
-    "Wash towels & bath mats",
-    "Clean toilets",
-    "Dust furniture, shelves, TV, blinds",
-    "Empty bins in every room",
-    "Clean microwave & small appliances",
-    "Water indoor plants",
-    "Meal plan & grocery shop",
-    "Deep clean fridge & throw expired food",
-    "Wipe cabinet fronts & handles",
-    "Wash duvet covers, blankets, pillows",
-    "Clean oven & extractor hood filters",
-    "Vacuum upholstery (sofas, cushions)",
-    "Clean washing machine drum/filter",
-    "Clean dishwasher filter",
-    "Wipe skirting boards, doors, switches, remote controls",
-    "Declutter kids’ clothes, toys, or drawers",
-    "Flip/rotate mattresses",
-    "Wash curtains or window coverings",
-    "Clean behind/under fridge, washing machine, cooker",
-    "Descale kettle, coffee machine, shower heads",
-    "Restock cleaning/household supplies",
-    "Wash windows (inside/outside)",
-    "Garden/yard: mow lawn, trim hedges, sweep patio",
-    "Clean car: vacuum, wipe surfaces, check fluids",
-    "Declutter wardrobe (season change clothes)",
-    "Organise seasonal decorations (Christmas, Halloween, etc.)",
-    "Clean gutters",
-    "Service boiler/heating/air conditioning",
-    "Spring clean full house reset",
-    "Steam clean carpets or rugs",
-    "Clean garage/loft/attic/storage",
-    "Replace smoke alarm/carbon monoxide detector batteries",
-    "Replace car key, remote, clock, toy batteries",
-    "Check expiry dates in medicine cabinet & first aid kit",
-    "Service the car (MOT, oil, tyres, brakes, etc.)",
-    "Service major appliances (boiler, HVAC, water filter)",
-    "Update paperwork (insurance, school forms, tax, etc.)",
-    "Declutter digital: photos, subscriptions, files"
-  ];
-
-  const taskListDiv = document.getElementById('taskList');
-
-  tasks.forEach(task => {
-    const span = document.createElement('span');
-    span.className = 'task';
-    span.innerText = task;
-    span.onclick = () => span.classList.toggle('done');
-    taskListDiv.appendChild(span);
-  });
 </script>
 
 </body>
