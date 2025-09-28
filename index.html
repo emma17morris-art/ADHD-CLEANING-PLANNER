@@ -12,13 +12,21 @@
       font-family: Arial, sans-serif;
     }
 
-    /* Fullscreen grid for 4 tiles */
+    /* Pastel rainbow header */
+    header {
+      background: linear-gradient(90deg, #ffe0e9, #fff3cd, #e0f7fa, #e8f5e9);
+      color: #333;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    /* Home screen tiles as 4 rows */
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      height: 100%;
-      width: 100%;
+      grid-template-rows: 1fr 1fr 1fr 1fr;
+      height: calc(100% - 60px); /* full height minus header */
     }
 
     .tile {
@@ -34,11 +42,11 @@
     }
 
     .tile:hover {
-      transform: scale(1.05);
+      transform: scale(1.02);
       opacity: 0.9;
     }
 
-    /* Pastel rainbow colours */
+    /* Pastel rainbow row colours */
     .calendar { background: #ffe0e9; }   /* pastel pink */
     .planner { background: #fff3cd; }    /* pastel yellow */
     .customise { background: #e0f7fa; }  /* pastel teal */
@@ -70,11 +78,13 @@
 </head>
 <body>
 
-<!-- Home Page with fullscreen 4 tiles -->
+<header>ADHD Cleaning Planner</header>
+
+<!-- Home Page with 4 full-width pastel rows -->
 <div id="home" class="tab active">
   <div class="grid">
     <div class="tile calendar" onclick="showTab('calendar')">📅 Calendar</div>
-    <div class="tile planner" onclick="showTab('planner')">📝 Preplanned<br>Planner</div>
+    <div class="tile planner" onclick="showTab('planner')">📝 Preplanned Planner</div>
     <div class="tile customise" onclick="showTab('customise')">🎨 Customise</div>
     <div class="tile settings" onclick="showTab('settings')">⚙️ Settings</div>
   </div>
